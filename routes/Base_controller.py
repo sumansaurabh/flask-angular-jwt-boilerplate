@@ -15,14 +15,7 @@ def create_token(user):
 
 
 def parse_token(req):
-    print("header ---")
-    print(req.headers)
     token = req.headers.get('Authorization').split()[1]
-    print("token")
-    print(token)
-
-    print("token_Scret")
-    print(config.TOKEN_SECRET)
     return jwt.decode(token, config.TOKEN_SECRET)
 
 
