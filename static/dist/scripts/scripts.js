@@ -82,11 +82,17 @@ app.controller('LoginCtrl',['$scope', '$state', '$location', '$auth', function($
  * Controller of yapp
  */
 
-app.controller('DashboardCtrl', function($scope, $state) {
+app.controller('DashboardCtrl', function($scope, $state, $http) {
     $scope.$state = $state;
     var hello = "hellp";
 
-
+    console.log("in dashbaord cteel");
+    $http({
+            method: 'GET',
+            url: "/api/get_cofee"
+        }).then(function (response) {
+            console.log('suman')
+        });
 
     $scope.menuItems = [];
     angular.forEach($state.get(), function (item) {

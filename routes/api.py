@@ -6,13 +6,14 @@ routes.api.py
 :copyright: (c) 2014
 """
 from flask import Blueprint, jsonify
+from Base_controller import login_required
 
-# import core.coffee_shops
 
 api = Blueprint('api', __name__)
 
-@api.route('/api/coffee-shop/list.json')
+@api.route('/api/get_cofee', methods=['GET'])
+@login_required
 def coffee_shop_list():
-  """ Get list cooffee shops """
-  data = core.coffee_shops.get_list()
-  return jsonify(data)
+	"""Checkk authentication flow"""
+	return jsonify({'hello': "I am your coffee"})
+

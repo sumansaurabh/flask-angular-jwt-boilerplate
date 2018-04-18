@@ -11,6 +11,7 @@ import flask
 
 from Models.User import User
 import config
+from Base_controller import login_required
 
 
 home = Blueprint('home', __name__)
@@ -59,7 +60,6 @@ def login():
 		return jsonify(token=user.token()), 200
 	else:
 		return jsonify(error="Wrong email or password"), 400
-
 
 
 @home.route('/robots.txt/')
