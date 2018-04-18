@@ -58,21 +58,19 @@ app.run(function ($rootScope, $state, $auth) {
  * Controller of yapp
  */
 
-app.controller('LoginCtrl', function($scope, $location) {
+app.controller('LoginCtrl',['$scope', '$state', '$location', '$auth', function($scope, $state, $location, $auth) {
 
     $scope.submit = function() {
     	$auth.login({email: $scope.email, password: $scope.password}).then(function (response) {
 	        $auth.setToken(response);
 	        $state.go('dashboard');
 	    }).catch(function (response) {
-	        toastr.error(
-	          'Email or password not correct!',
-	          {closeButton: true}
-	        );
+	        console.log('Invalid password!')
+
 	      })
     }
 
-});
+}]);
 
 'use strict';
 

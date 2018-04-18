@@ -50,7 +50,8 @@ def login():
 	email = data.get("email")
 	password = data.get("password")
 
-	user = User.query.filter_by(email=email).first()
+	user = config.db.session.query(User).filter_by(email=email).first()
+	print(user)
 	if not user:
 		return jsonify(error="No such user"), 404
 
