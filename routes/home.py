@@ -7,6 +7,8 @@ routes.home.py
 """
 from flask import (Blueprint, current_app, render_template,
 				   request, send_from_directory, jsonify)
+import flask
+
 from Models.User import User
 import config
 
@@ -15,7 +17,6 @@ home = Blueprint('home', __name__)
 
 
 @home.route('/')
-@home.route('/coffee-shops')
 def index():
 	"""Redirect to the AngularJS entry."""
 	print("sdkjjdjksgdsgnd ---------- ")
@@ -60,13 +61,6 @@ def login():
 
 
 
-@home.route('/<path:path>')
-def file_path(path):
-	"""Serves template resources."""
-	print('path dsfdsfd--> ',path)
-	return render_template(path)
-  
-
 @home.route('/robots.txt/')
 @home.route('/sitemap.xml/')
 @home.route('/favicon.ico/')
@@ -75,8 +69,7 @@ def static_from_root():
 	return send_from_directory(current_app.static_folder, request.path[1:])
 
 
-@home.route('/<path:filename>')
-def templates(filename):
-	"""Serves template resources."""
-	print("sdlbnsdjb -->",filename)
-	return render_template(filename)
+@home.route('/<path:path>')
+def send_fonts(path):
+	x = current_app.static_folder +'/dist/'
+	return send_from_directory(x, path)

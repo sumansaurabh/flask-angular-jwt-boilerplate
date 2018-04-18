@@ -18,7 +18,7 @@ from routes.home import home
 from Models.User import Base,User
 
 LIST_MODULES = [api, home]
-template_dir = os.path.abspath('./static/app')
+template_dir = os.path.abspath('./static/dist/')
 app = Flask(__name__, template_folder=template_dir)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///iq_deployment.db'
