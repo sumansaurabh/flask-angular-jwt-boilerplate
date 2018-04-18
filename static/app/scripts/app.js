@@ -17,16 +17,32 @@ var states = [
         { name: 'logout', state: { url: '/login', data: {text: "Logout", visible: true }} }
     ];
    
-angular.module('yapp', [
+var app = angular.module('iqDeployment', [
                 'ui.router',
                 'ngAnimate',
-                'snap'
-            ])
-        .config(function($stateProvider, $urlRouterProvider) {
-            $urlRouterProvider.when('/dashboard', '/dashboard/overview');
-            $urlRouterProvider.otherwise('/login');
-            
-            angular.forEach(states, function (state) {
-                $stateProvider.state(state.name, state.state);
-            });
-        });
+                'snap',
+                'satellizer'
+            ]);
+
+app.config(function($stateProvider, $urlRouterProvider, $authProvider) {
+    $urlRouterProvider.when('/dashboard', '/dashboard/overview');
+    $urlRouterProvider.otherwise('/login');
+    
+    angular.forEach(states, function (state) {
+        $stateProvider.state(state.name, state.state);
+    });
+});
+
+app.run(function ($rootScope, $state, $auth) {
+    $rootScope.$on('$stateChangeStart',
+        function (event, toState) {
+            var requiredLogin = false;
+            if (toState.data && toState.data.requiredLogin)
+                requiredLogin = true;
+
+            if (requiredLogin && !$auth.isAuthenticated()) {
+                event.preventDefault();
+                $state.go('login');
+        }
+    });
+});

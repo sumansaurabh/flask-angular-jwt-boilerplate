@@ -7,14 +7,19 @@
  * # MainCtrl
  * Controller of yapp
  */
-angular.module('yapp')
-  .controller('LoginCtrl', function($scope, $location) {
+
+app.controller('LoginCtrl', function($scope, $location) {
 
     $scope.submit = function() {
-
-      $location.path('/dashboard');
-
-      return false;
+    	$auth.login({email: $scope.email, password: $scope.password}).then(function (response) {
+	        $auth.setToken(response);
+	        $state.go('dashboard');
+	    }).catch(function (response) {
+	        toastr.error(
+	          'Email or password not correct!',
+	          {closeButton: true}
+	        );
+	      })
     }
 
-  });
+});

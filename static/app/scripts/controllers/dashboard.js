@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of yapp
  */
-angular.module('yapp')
-  .controller('DashboardCtrl', function($scope, $state) {
+
+app.controller('DashboardCtrl', function($scope, $state) {
     $scope.$state = $state;
 
     $scope.menuItems = [];
@@ -17,4 +17,4 @@ angular.module('yapp')
             $scope.menuItems.push({name: item.name, text: item.data.text});
         }
     });
-  });
+});

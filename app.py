@@ -34,7 +34,7 @@ def setup():
     # Recreate database each time for demo
 
     print("sdglknsdbksdnbjkndskbndsknbkn --------- ")
-    Base.metadata.drop_all(bind=config.db.engine)
+    # Base.metadata.drop_all(bind=config.db.engine)
     Base.metadata.create_all(bind=config.db.engine)
     # config.db.session.add(User('Bob Jones', 'bob@gmail.com'))
     # config.db.session.add(User('Joe Quimby', 'eat@joes.com'))

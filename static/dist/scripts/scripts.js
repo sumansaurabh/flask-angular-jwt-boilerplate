@@ -17,19 +17,35 @@ var states = [
         { name: 'logout', state: { url: '/login', data: {text: "Logout", visible: true }} }
     ];
    
-angular.module('yapp', [
+var app = angular.module('iqDeployment', [
                 'ui.router',
                 'ngAnimate',
-                'snap'
-            ])
-        .config(function($stateProvider, $urlRouterProvider) {
-            $urlRouterProvider.when('/dashboard', '/dashboard/overview');
-            $urlRouterProvider.otherwise('/login');
-            
-            angular.forEach(states, function (state) {
-                $stateProvider.state(state.name, state.state);
-            });
-        });
+                'snap',
+                'satellizer'
+            ]);
+
+app.config(function($stateProvider, $urlRouterProvider, $authProvider) {
+    $urlRouterProvider.when('/dashboard', '/dashboard/overview');
+    $urlRouterProvider.otherwise('/login');
+    
+    angular.forEach(states, function (state) {
+        $stateProvider.state(state.name, state.state);
+    });
+});
+
+app.run(function ($rootScope, $state, $auth) {
+    $rootScope.$on('$stateChangeStart',
+        function (event, toState) {
+            var requiredLogin = false;
+            if (toState.data && toState.data.requiredLogin)
+                requiredLogin = true;
+
+            if (requiredLogin && !$auth.isAuthenticated()) {
+                event.preventDefault();
+                $state.go('login');
+        }
+    });
+});
 
 'use strict';
 
@@ -40,17 +56,22 @@ angular.module('yapp', [
  * # MainCtrl
  * Controller of yapp
  */
-angular.module('yapp')
-  .controller('LoginCtrl', function($scope, $location) {
+
+app.controller('LoginCtrl', function($scope, $location) {
 
     $scope.submit = function() {
-
-      $location.path('/dashboard');
-
-      return false;
+    	$auth.login({email: $scope.email, password: $scope.password}).then(function (response) {
+	        $auth.setToken(response);
+	        $state.go('dashboard');
+	    }).catch(function (response) {
+	        toastr.error(
+	          'Email or password not correct!',
+	          {closeButton: true}
+	        );
+	      })
     }
 
-  });
+});
 
 'use strict';
 
@@ -61,8 +82,8 @@ angular.module('yapp')
  * # MainCtrl
  * Controller of yapp
  */
-angular.module('yapp')
-  .controller('DashboardCtrl', function($scope, $state) {
+
+app.controller('DashboardCtrl', function($scope, $state) {
     $scope.$state = $state;
 
     $scope.menuItems = [];
@@ -71,4 +92,4 @@ angular.module('yapp')
             $scope.menuItems.push({name: item.name, text: item.data.text});
         }
     });
-  });
+});
