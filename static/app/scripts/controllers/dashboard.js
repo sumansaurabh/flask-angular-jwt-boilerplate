@@ -10,6 +10,9 @@
 
 app.controller('DashboardCtrl', function($scope, $state) {
     $scope.$state = $state;
+    var hello = "hellp";
+
+
 
     $scope.menuItems = [];
     angular.forEach($state.get(), function (item) {

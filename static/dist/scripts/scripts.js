@@ -16,7 +16,8 @@ var states = [
         { name: 'reports', state: { url: '/reports', parent: 'dashboard', templateUrl: 'views/dashboard/reports.html', data: {text: "Reports", visible: true } } },
         { name: 'logout', state: { url: '/login', data: {text: "Logout", visible: true }} }
     ];
-   
+    console.log("suman");
+
 var app = angular.module('iqDeployment', [
                 'ui.router',
                 'ngAnimate',
@@ -85,6 +86,9 @@ app.controller('LoginCtrl', function($scope, $location) {
 
 app.controller('DashboardCtrl', function($scope, $state) {
     $scope.$state = $state;
+    var hello = "hellp";
+
+
 
     $scope.menuItems = [];
     angular.forEach($state.get(), function (item) {
