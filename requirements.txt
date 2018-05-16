@@ -3,3 +3,4 @@ Flask-Script
 PyJWT>=1.4.0
 Flask-SQLAlchemy>=1.0
 requests>=2.7.0
+oauth2client

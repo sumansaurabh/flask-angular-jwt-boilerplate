@@ -8,13 +8,27 @@ routes.home.py
 from flask import (Blueprint, current_app, render_template,
 				   request, send_from_directory, jsonify)
 import flask
+import requests
 
 from Models.User import User
 import config
-from Base_controller import login_required
+from Base_controller import login_required, jsonify_resp
 
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+from oauth2client.client import OAuth2WebServerFlow
+import logging																																										
+import sys
+
+logging.StreamHandler(sys.stdout)
+logging.basicConfig(level=logging.DEBUG)
+
+import json
 
 home = Blueprint('home', __name__)
+
+client_secret_google = json.loads(
+	open('./config/client_secret_google.json', 'r').read())
 
 
 @home.route('/')
@@ -43,6 +57,60 @@ def signup():
 	config.db.session.commit()
 
 	return jsonify(token=user.token())
+
+@home.route('/auth/google', methods=['POST'])
+@jsonify_resp
+def signup_google():
+	data = request.json
+	from pprint import pprint
+	pprint(data)
+	code = request.data
+	oauth_flow = flow_from_clientsecrets('./config/client_secret_google.json', scope='')
+	pprint(oauth_flow)
+	oauth_flow.redirect_uri = 'http://localhost:5000'
+	credentials = oauth_flow.step2_exchange(data)
+	access_token = credentials.access_token
+	url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'% access_token)
+
+	print("access_token ->",access_token)
+	print("url ->",url)
+	result = json.loads(requests.get(url).text)
+
+	pprint(result)
+
+	email = result['email']
+	password = result['user_id']
+
+	user = User(email=email, password=password)
+
+	print(user)
+	config.db.session.add(user)
+	config.db.session.commit()
+
+	return {"token":user.token()}, 200
+
+
+	# flow = OAuth2WebServerFlow(client_id=client_secret_google['web']['client_id'],
+ #                           client_secret=client_secret_google['web']['client_secret'],
+ #                           scope='',
+ #                           redirect_uri='http://localhost:5000')
+	# credentials = flow.step2_exchange(code)
+
+
+	# try:
+	# 	# Upgrade the authorization code into a credentials object
+	# 	oauth_flow = flow_from_clientsecrets('./config/client_secret_google.json', scope='')
+	# 	pprint(oauth_flow)
+	# 	oauth_flow.redirect_uri = 'postmessage'
+	# 	credentials = oauth_flow.step2_exchange(code)
+	# except FlowExchangeError:
+	# 	return {"eoro":"er"}, 400
+
+
+
+
+	return {}, 200
+
 
 @home.route('/auth/login', methods=['POST'])
 def login():

@@ -17,7 +17,17 @@ app.controller('LoginCtrl',['$scope', '$state', '$location', '$auth', function($
 	    }).catch(function (response) {
 	        console.log('Invalid password!')
 
-	      })
+	    })
     }
+
+    $scope.authenticate_by_provider = function(provider) {
+    	$auth.authenticate(provider).then(function(response) {
+            $auth.setToken(response.token);
+            $state.go('dashboard');
+        })
+        .catch(function(response) {
+            console.log(response);
+        });
+    };
 
 }]);

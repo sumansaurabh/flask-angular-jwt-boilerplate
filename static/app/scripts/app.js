@@ -26,6 +26,31 @@ var app = angular.module('iqDeployment', [
             ]);
 
 app.config(function($stateProvider, $urlRouterProvider, $authProvider) {
+    // $authProvider.google({
+    //     clientId: '771308557555-eobkgorqrga3cn5egfitru1uvc5bnq9n.apps.googleusercontent.com',
+    //     optionalUrlParams: ['access_type'],
+    //     accessType: 'offline'
+    // });
+
+    $authProvider.google({
+        url: '/auth/google',
+        authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
+        redirectUri: window.location.origin,
+        requiredUrlParams: ['scope'],
+        optionalUrlParams: ['display'],
+        scope: ['profile', 'email'],
+        scopePrefix: 'openid',
+        scopeDelimiter: ' ',
+        display: 'popup',
+        oauthType: '2.0',
+        popupOptions: { width: 452, height: 633 },
+        clientId: '771308557555-9bn3b5ssng28mj0l6sj0fa1c0rfv26f0.apps.googleusercontent.com',
+        optionalUrlParams: ['access_type'],
+        accessType: 'offline'
+    });
+
+
+
     $urlRouterProvider.when('/dashboard', '/dashboard/overview');
     $urlRouterProvider.otherwise('/login');
     

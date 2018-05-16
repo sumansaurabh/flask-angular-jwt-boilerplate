@@ -17,7 +17,7 @@ class User(Base):
 
 	def token(self):
 		payload = {
-			'sub': self.email,
+			'email': self.email,
 			'iat': datetime.utcnow(),
 			'exp': datetime.utcnow() + timedelta(days=14)
 		}

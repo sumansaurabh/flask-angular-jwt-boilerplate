@@ -43,3 +43,13 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
+
+def jsonify_resp(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        
+        resp, status = f(*args, **kwargs)
+        return jsonify(resp), status
+
+    return decorated_function
